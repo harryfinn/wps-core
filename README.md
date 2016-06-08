@@ -26,7 +26,7 @@ recommend using a folder inside your theme named `includes`):
 ```txt
 mkdir includes && cd includes
 git submodule add git@github.com:harryfinn/wps-core.git
-git submodule update --init
+git submodule update --init --recursive
 ```
 
 This project leverages the `CMB2` library by [WebDevStudios](https://github.com/WebDevStudios/CMB2)
