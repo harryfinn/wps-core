@@ -25,7 +25,7 @@ recommend using a folder inside your theme named `includes`):
 
 ```txt
 mkdir includes && cd includes
-git submodule add git@github.com:harryfinn/wps-core.git
+git submodule add git@github.com:harryfinn/wps-core.git wps
 git submodule update --init --recursive
 ```
 
