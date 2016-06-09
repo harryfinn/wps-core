@@ -3,7 +3,6 @@
 class WPS {
   final public static function load_wps_core() {
     new WPS\Controllers();
-    new WPS\Views();
     WPS\ModelsLoader::init();
   }
 
