@@ -8,19 +8,20 @@ class View {
          $img_width,
          $img_height,
          $render_args,
-         $helper;
+         $helper,
+         $cmb_prefix = CMB2_PREFIX,
+         $field_defaults = [
+           'multi'       => false,
+           'multi_val'   => null,
+           'is_single'   => true,
+           'placeholder' => false
+         ];
 
-  public $cmb_prefix = CMB2_PREFIX;
-
-  public $field_defaults = [
-    'multi'       => false,
-    'multi_val'   => null,
-    'is_single'   => true,
-    'placeholder' => false
-  ];
+  private $_initialised_post_id;
 
   public function __construct($post_id) {
     $this->post_id = $post_id;
+    $this->_initialised_post_id = $post_id;
     $this->helper = new ViewHelper(ViewHelpersLoader::init());
   }
 
@@ -98,6 +99,14 @@ class View {
 
   public function format_content($content) {
     return apply_filters('the_content', $content);
+  }
+
+  public function set_new_post_id(int $new_post_id) {
+    $this->post_id = $new_post_id;
+  }
+
+  public function restore_previous_post_id() {
+    $this->post_id = $this->_initialised_post_id;
   }
 
   protected function get_cmb2_field($field, $is_single = true) {
