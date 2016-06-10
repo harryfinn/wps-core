@@ -7,7 +7,8 @@ class View {
          $field_prefix,
          $img_width,
          $img_height,
-         $render_args;
+         $render_args,
+         $helper;
 
   public $cmb_prefix = CMB2_PREFIX;
 
@@ -20,6 +21,7 @@ class View {
 
   public function __construct($post_id) {
     $this->post_id = $post_id;
+    $this->helper = new ViewHelper(ViewHelpersLoader::init());
   }
 
   public function set_image_size($width, $height) {
