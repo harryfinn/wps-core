@@ -86,6 +86,8 @@ class View {
 
     if(file_exists($render_path)) {
       include($render_path);
+
+      $this->restore_previous_post_id();
     } else {
       trigger_error("No template found for: $template_file ($template_name)");
     }
