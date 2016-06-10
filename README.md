@@ -79,6 +79,7 @@ define('WPS_INCLUDES_DIR', $template_dir . '/includes/wps');
 define('WPS_MODELS_DIR', $template_dir . '/app/models');
 define('WPS_VIEWS_DIR', $template_dir . '/app/views');
 define('WPS_CONTROLLERS_DIR', $template_dir . '/app/controllers');
+define('WPS_HELPERS_DIR', $template_dir . '/app/helpers');
 
 // Defines load priorities for use with actions and filters
 define('LOAD_ON_INIT', 1);
@@ -196,3 +197,55 @@ type.
 
 Note that `CMB2_PREFIX` is a constant defined within your `constants.php` file
 and should be added before each custom metabox field id.
+
+### Adding Views
+
+The views folder is designed to house components, reusable sections of code
+along with template specific blocks to help break down the primary WordPress
+template pages.
+
+A view partial can be rendered into a page template by creating an instance of
+the view class (you should only have one instance per page) and then calling the
+render method as shown below:
+
+```php
+$homepage_view = new WPS\View(get_the_ID());
+$homepage_view->render('homepage/hero-slider');
+```
+
+The above code will look within the views folder for a subfolder of `homepage`
+containing a file named `hero-slider-tpl.php`. You can pass the filename
+suffix and file extension (`-tpl.php`), however, these are not required by
+default.
+
+The View's class contains a series of methods to help manage simple interactions
+with CMB2, the custom metabox library used in this library.
+
+TODO: Add reference list of View methods
+
+#### View Helpers
+
+In order to reduce the 'mess' that is often found in WordPress templates, helper
+methods can be created and utilised via any instance of the `WPS\View` class.
+
+Helper methods should only be used for view based functionality, i.e.
+interacting with items displayed within a template or subsequent partial, such
+as manipulating the text output for an excerpt. They should not be used for
+query logic or anything else outside the scope of a view.
+
+To add a new helper class, create a new php file within the `WPS_HELPERS_DIR`
+directory, I'd recommend setting the helper constant to `app/helpers`.
+
+Below is an example helper file which can be used as a guide:
+
+```php
+class HomepageHeroHelper {
+  public function format_hero_subtitle($text) {
+    return str_replace(' ', '-', $text);
+  }
+}
+```
+
+This method can then be called by any view or within any partial/component that
+has been included via the `render` method via
+`$this->helper->format_hero_subtitle($subtitle)`
