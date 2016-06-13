@@ -44,25 +44,21 @@ within your existing code/framework.
 # Functions file for loading of core files via autoloading methods
 
 require_once(get_template_directory() . '/includes/constants.php');
+require_once(WPS_INCLUDES_DIR . '/class.wps.php');
 
 class MyTheme {
-  public function __construct() {
-    $this->init();
-    $this->include_wp_functions();
+  public static function init() {
+    WPS::init();
 
-    WPS::load_wps_core();
+    self::include_wp_functions();
   }
 
-  private function init() {
-    require_once(WPS_INCLUDES_DIR . '/class.autoloaders.php');
-
-    new WPS\Autoloaders();
+  private static function include_wp_functions() {
+    // Theme functions, support and includes etc
   }
-
-  private function include_wp_functions() {}
 }
 
-new MyTheme();
+MyTheme::init();
 ```
 
 Inside the folder you have included this repo as a submodule (suggested folder

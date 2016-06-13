@@ -1,9 +1,16 @@
 <?php
 
+require_once(WPS_INCLUDES_DIR . '/class.autoloaders.php');
+
 class WPS {
-  final public static function load_wps_core() {
-    new WPS\Controllers();
+  public static function init() {
+    self::load_wps_core();
+  }
+
+  private static function load_wps_core() {
+    WPS\Autoloaders::init();
     WPS\ModelsLoader::init();
+    new WPS\Controllers();
   }
 
   protected static function load_files_within($dir, $filter_iterator, $callback = null) {
