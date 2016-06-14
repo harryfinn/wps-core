@@ -19,7 +19,8 @@ class Model {
          $default_query_args = [
            'paged' => 1,
            'post_status' => 'publish'
-         ];
+         ],
+         $_wpdb;
 
   public function __construct($post_type, array $cpt_args = []) {
     $this->post_type = $post_type;
@@ -40,6 +41,14 @@ class Model {
     );
 
     return new \WP_Query($args);
+  }
+
+  public function wpdb() {
+    if(!empty($this->_wpdb)) return $this->_wpdb;
+
+    $this->_wpdb = $GLOBALS['wpdb'];
+
+    return $this->_wpdb;
   }
 
   private function register_custom_post_type($cpt, $cpt_args) {
