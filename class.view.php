@@ -19,7 +19,7 @@ class View {
 
   private $_initialised_post_id;
 
-  public function __construct($post_id) {
+  public function __construct($post_id = null) {
     $this->post_id = $post_id;
     $this->_initialised_post_id = $post_id;
     $this->helper = new ViewHelper(ViewHelpersLoader::init());
