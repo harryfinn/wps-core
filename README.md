@@ -245,3 +245,40 @@ class HomepageHeroHelper {
 This method can then be called by any view or within any partial/component that
 has been included via the `render` method via
 `$this->helper->format_hero_subtitle($subtitle)`
+
+### Adding Controllers
+
+The `controller` folder is where your controller logic lives, separated into a
+separate class per post type.
+
+A controller class contains the logic and variables passed into a page template.
+This could be a query object for a collection of items, i.e. a set of posts for
+a listing view. Below is an example of a controller that can be used with a
+custom post type archive listing view:
+
+```php
+class PortfolioController extends WPS\Controller {
+  public function __construct($post_type = null, $template_fallback) {
+    parent::__construct($post_type, $template_fallback);
+  }
+
+  public function index($template) {
+    $portfolio_items = [78 => 'test 1', 87 => 'test 2'];
+
+    include $template;
+  }
+}
+```
+
+In the example above, the post type is automatically set to the current post
+type detected by WordPress (via `get_query_var` method) which in turn is what
+links up the use of the controllers.
+
+Here the post type is `portfolio`, so the `PortfolioController` class is loaded
+and because the template being requested is the `archive` template
+(`archive-portfolio.php`), the `index` method is called. The `$portfolio_items`
+variable is then exposed to the template and available within the view.
+
+Note: Currently only `archive-{$post_type}.php` files are supported and routed
+through these controllers. This will be updated in future PR's in order to fully
+support standard templates and individual posts/pages prior to `v1.0.0`
