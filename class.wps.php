@@ -10,7 +10,7 @@ class WPS {
   private static function load_wps_core() {
     WPS\Autoloaders::init();
     WPS\ModelsLoader::init();
-    new WPS\Controllers();
+    WPS\ControllersLoader::init();
   }
 
   protected static function load_files_within($dir, $filter_iterator, $callback = null) {
