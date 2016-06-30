@@ -10,9 +10,7 @@ class ControllersLoader {
   public static function load_cpt_archive_controller($template) {
     $controller = self::load_controller(get_query_var('post_type'), $template);
 
-    if(!empty($controller)) return $controller;
-
-    return $template;
+    if(empty($controller)) return $template;
   }
 
   private static function load_controller($post_type, $template_fallback) {
@@ -23,6 +21,8 @@ class ControllersLoader {
 
       $controller_name = ucwords($post_type) . 'Controller';
       new $controller_name($post_type, $template_fallback);
+
+      return true;
     }
 
     return false;
