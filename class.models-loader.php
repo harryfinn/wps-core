@@ -21,11 +21,11 @@ class ModelsLoader extends \WPS {
     }
   }
 
-  public static function loader_callback($filename) {
+  public static function loader_callback($file) {
     $filter_filename = str_replace(
       ['cmb2.', 'model.', '.php'],
       '',
-      $filename
+      $file->getFilename()
     );
     $class_name = implode(
       '-',
