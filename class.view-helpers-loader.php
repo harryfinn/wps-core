@@ -17,8 +17,8 @@ class ViewHelpersLoader extends \WPS {
     return self::$_helper_classes;
   }
 
-  public static function helpers_loader_callback($filename) {
-    $filter_filename = str_replace(['class.', '.php'], '', $filename);
+  public static function helpers_loader_callback($file) {
+    $filter_filename = str_replace(['class.', '.php'], '', $file->getFilename());
     $class_name = str_replace('-', '', implode(
       '-',
       array_map('ucfirst', explode('-', $filter_filename))

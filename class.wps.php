@@ -13,7 +13,7 @@ class WPS {
     WPS\ControllersLoader::init();
   }
 
-  protected static function load_files_within($dir, $filter_iterator, $callback = null) {
+  public static function load_files_within($dir, $filter_iterator, $callback = null, $load_file = true) {
     $dir_files = new RecursiveDirectoryIterator(
       $dir,
       RecursiveDirectoryIterator::SKIP_DOTS
@@ -28,9 +28,9 @@ class WPS {
 
     foreach($files_iterator as $file) {
       if($file->isFile()) {
-        require_once($file->getPathname());
+        if($load_file) require_once($file->getPathname());
 
-        if(!empty($callback)) $callback($file->getFilename());
+        if(!empty($callback)) $callback($file);
       }
     }
   }
