@@ -32,9 +32,9 @@ class ControllersLoader extends \WPS {
 
     $page_templates = is_array($current_page_templates) ?
       $current_page_templates :
-      [];
+      array_merge($page_templates, []);
 
-    $_wps_template_files = self::load_files_within(
+    self::load_files_within(
       WPS_VIEWS_DIR,
       'WPS\TemplatesRecursiveFilterIterator',
       'WPS\ControllersLoader::build_wp_page_templates_array',
@@ -60,13 +60,7 @@ class ControllersLoader extends \WPS {
   }
 
   public static function build_wp_page_templates_array($file) {
-    $local_file_path = str_replace(
-      get_template_directory(),
-      '',
-      $file->getPathname()
-    );
-
-    self::$_wp_page_templates[$local_file_path] = $file->getPathname();
+    self::$_wp_page_templates[$file->getFilename()] = $file->getPathname();
   }
 
   private static function get_current_post_type() {
