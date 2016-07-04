@@ -53,14 +53,10 @@ class Controller {
   }
 
   public function index($template) {
-    $this->render_template($template);
+    include $template;
   }
 
   public function single($template) {
-    $this->render_template($template);
-  }
-
-  private function render_template($template) {
     include $template;
   }
 
