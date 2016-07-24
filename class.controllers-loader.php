@@ -64,6 +64,8 @@ class ControllersLoader extends \WPS {
   }
 
   private static function get_current_post_type() {
+    if(self::is_blog_index()) return self::set_blog_index_post_type();
+
     $post_type = !empty(self::$current_query->query['post_type']) ?
       self::$current_query->query['post_type'] :
       self::$current_query->queried_object->post_type;
@@ -111,6 +113,21 @@ class ControllersLoader extends \WPS {
       '',
       implode('-', array_map('ucfirst', explode('-', $post_type)))
     ) . 'Controller';
+  }
+
+  private static function is_blog_index() {
+    return is_home();
+  }
+
+  private static function set_blog_index_post_type() {
+    $post_type = 'post';
+    $blog_index_template = WPS_VIEWS_DIR . "/$post_type/index-$post_type.php";
+
+    if(file_exists($blog_index_template)) {
+      self::$template = $blog_index_template;
+    }
+
+    return $post_type;
   }
 }
 
