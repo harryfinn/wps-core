@@ -72,6 +72,7 @@ $template_dir = get_template_directory();
 define('WPS_INCLUDES_DIR', $template_dir . '/includes/wps');
 
 // Sets the directories for each element of the WPS MVC pattern
+define('WPS_APP_DIR', $template_dir . '/app');
 define('WPS_MODELS_DIR', $template_dir . '/app/models');
 define('WPS_VIEWS_DIR', $template_dir . '/app/views');
 define('WPS_CONTROLLERS_DIR', $template_dir . '/app/controllers');
@@ -88,7 +89,7 @@ This file is then referenced in your functions file (see the functions file
 example code above), allow access to these defined constants across your WP
 theme.
 
-### Structure
+## Structure
 
 Whilst this repo contains just the core library of WPS and is separate from the
 theme structure, it is important to note that by using the MVC elements (models,
@@ -279,6 +280,45 @@ and because the template being requested is the `archive` template
 (`archive-portfolio.php`), the `index` method is called. The `$portfolio_items`
 variable is then exposed to the template and available within the view.
 
-Note: Currently only `archive-{$post_type}.php` files are supported and routed
-through these controllers. This will be updated in future PR's in order to fully
-support standard templates and individual posts/pages prior to `v1.0.0`
+For single post type templates, use the following format when naming files:
+`single-{$post_type}.php` in conjunction with the `single` controller method.
+
+For the blog index page, use the following format: `index-post.php` along with
+the `index` controller method within the `PostController` class.
+
+### Adding standalone classes/methods
+
+During your WordPress theme development, you'll likely come to a point at which
+you need to separate function (potentially shared) away from a controller or
+model and need to house this somewhere.
+
+WPS supports this 'wildcard' structuring by allowing for concept classes to be
+added to a subfolder within the `/app` directory.
+
+For example: You have a class which handles the navigation between post type
+items (i.e. the next post in the collection). This logic is doesn't belong in
+the controller or model, not only because it has separate concerns but also
+because it can be used across multiple post types. Therefore, we can add the
+class file (`NextPost` for this example) to a new folder within `/app/concepts`.
+
+The class must then be namespaced inline with the named parent folder, see the
+code example below:
+
+```php
+<?php
+
+namespace Concepts;
+
+class NextPost {
+  // Class methods go here
+}
+```
+
+To then call this class in your model or controller, you must reference the
+class via it's namespace: `$next_post = new Concepts\NextPost()`.
+
+Note: The subfolder can be named whatever is most appropriate for the containing
+class(es). If you have a set of classes which handle different external
+services, a folder named `services` would be better suited. You can add as many
+of these folders as required but keep in mind that this should not be used as a
+general 'dumping ground' for anonymous methods/functionality.

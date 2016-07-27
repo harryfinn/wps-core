@@ -17,6 +17,14 @@ class Autoloaders {
     $class_file_path = self::class_file_path($class_name);
 
     if(file_exists($class_file_path)) require_once $class_file_path;
+
+    $app_namespaced_class_file_path = self::app_namespaced_class_file_path(
+      $class_name
+    );
+
+    if(file_exists($app_namespaced_class_file_path)) {
+      require_once $app_namespaced_class_file_path;
+    }
   }
 
   public static function autoload_lib_classes($name) {
@@ -36,7 +44,8 @@ class Autoloaders {
 
   protected static function class_file_path($filename) {
     if(strpos($filename, '\\') !== false) {
-      return self::load_wps_namespaced_class($filename);
+      return trailingslashit(dirname(WPS_INCLUDES_DIR)) .
+        self::load_namespaced_class($filename);
     }
 
     $lowercase_filename = strtolower($filename);
@@ -47,18 +56,22 @@ class Autoloaders {
     return self::load_wps_app_files($lowercase_filename);
   }
 
-  private static function load_wps_namespaced_class($filename) {
+  protected static function app_namespaced_class_file_path($filename) {
+    return trailingslashit(WPS_APP_DIR) .
+      self::load_namespaced_class($filename);
+  }
+
+  private static function load_namespaced_class($filename) {
     $file_path_parts = explode('/', str_replace('\\', '/', $filename));
     $file_path_keys = array_keys($file_path_parts);
     $class_filename_key = end($file_path_keys);
     $class_filename = self::format_class_filename(
       $file_path_parts[$class_filename_key]
     );
-    $file_path_parts[$class_filename_key] = 'class.' . $class_filename  . '.php';
+    $file_path_parts[$class_filename_key] = 'class.' .
+      ltrim($class_filename, '-')  . '.php';
 
-    return trailingslashit(dirname(WPS_INCLUDES_DIR)) . strtolower(
-      implode($file_path_parts, '/')
-    );
+    return strtolower(implode($file_path_parts, '/'));
   }
 
   private static function load_wps_app_files($filename) {
