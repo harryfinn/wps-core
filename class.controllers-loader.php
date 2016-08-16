@@ -132,5 +132,5 @@ class ControllersLoader extends \WPS {
 }
 
 class TemplatesRecursiveFilterIterator extends FilterIterator {
-  protected $file_prefixes = ['page', 'single'];
+  protected $file_prefixes = ['page', 'archive', 'index'];
 }
