@@ -66,6 +66,8 @@ class ControllersLoader extends \WPS {
   private static function get_current_post_type() {
     if(self::is_blog_index()) return self::set_blog_index_post_type();
 
+    if(self::is_homepage()) return self::set_homepage_post_type();
+
     $post_type = !empty(self::$current_query->query['post_type']) ?
       self::$current_query->query['post_type'] :
       self::$current_query->queried_object->post_type;
@@ -125,6 +127,21 @@ class ControllersLoader extends \WPS {
 
     if(file_exists($blog_index_template)) {
       self::$template = $blog_index_template;
+    }
+
+    return $post_type;
+  }
+
+  private static function is_homepage() {
+    return is_front_page();
+  }
+
+  private static function set_homepage_post_type() {
+    $post_type = 'homepage';
+    $homepage_template = WPS_VIEWS_DIR . "/$post_type/front-page.php";
+
+    if(file_exists($homepage_template)) {
+      self::$template = $homepage_template;
     }
 
     return $post_type;
