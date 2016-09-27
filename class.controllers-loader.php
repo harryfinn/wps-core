@@ -86,9 +86,13 @@ class ControllersLoader extends \WPS {
 
     if(empty($page_template)) return $post_type;
 
-    $page_name = str_replace(['page-', '.php'], '', $page_template);
+    if(self::is_default_page($page_template, $post_type)) {
+      return self::get_default_page_controller();
+    }
 
     self::$template = WPS_VIEWS_DIR . "/$post_type/$page_template";
+
+    $page_name = str_replace(['page-', '.php'], '', $page_template);
 
     return "$page_name-$post_type";
   }
@@ -145,6 +149,16 @@ class ControllersLoader extends \WPS {
     }
 
     return $post_type;
+  }
+
+  private static function is_default_page($page_template, $post_type) {
+    return $post_type === 'page' && $page_template === 'default';
+  }
+
+  private static function get_default_page_controller() {
+    self::$template = WPS_VIEWS_DIR . "/page/page-default.php";
+
+    return 'page';
   }
 }
 
