@@ -31,6 +31,8 @@ class Model {
       $post_type,
       wp_parse_args($cpt_args, $this->default_cpt_args)
     );
+
+    do_action("wps_{$post_type}_cpt_registered", $this->post_type);
   }
 
   public function query(array $query_args = null) {
@@ -89,11 +91,7 @@ class Model {
     ];
   }
 
-  private function register_custom_post_type($cpt, $cpt_args) {
-    register_post_type($cpt, $cpt_args);
-  }
-
-  private function register_custom_taxonomies($taxonomies) {
+  protected function register_custom_taxonomies($taxonomies) {
     foreach($taxonomies as $taxonomy => $taxonomy_options) {
       register_taxonomy(
         $taxonomy,
@@ -101,6 +99,10 @@ class Model {
         $taxonomy_options['taxonomy_args']
       );
     }
+  }
+
+  private function register_custom_post_type($cpt, $cpt_args) {
+    register_post_type($cpt, $cpt_args);
   }
 
   private function set_paged_value(array $query_args) {
