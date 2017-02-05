@@ -4,23 +4,38 @@ namespace WPS;
 
 class Controller {
   public $post_type,
-         $current_query;
+         $current_query,
+         $template,
+         $request_action,
+         $request_data;
 
   public function __construct($post_type, $current_query = null, $template) {
     $this->post_type = $post_type;
     $this->current_query = $this->set_current_query($current_query);
+    $this->template = $template;
+    $this->set_request_action();
     $this->render_post_route_template($template);
   }
 
-  public function index($template) {
-    include $template;
+  public function index() {
+    include $this->template;
   }
 
-  public function single($template) {
-    include $template;
+  public function single() {
+    include $this->template;
   }
+
+  public function create() {}
 
   private function render_post_route_template($template) {
+    if(!empty($this->request_action) && $this->request_action !== 'single') {
+      if(method_exists($this, $this->request_action)) {
+        $this->{$this->request_action}();
+
+        return;
+      }
+    }
+
     if(!$this->is_index_of_post_type()) {
       $this->render_single_template($template);
 
@@ -28,6 +43,23 @@ class Controller {
     }
 
   	$this->render_index_template($template);
+  }
+
+  private function set_request_action() {
+    $request_method = !empty($_SERVER['REQUEST_METHOD']) ?
+      $_SERVER['REQUEST_METHOD'] :
+      'GET';
+
+    $request_actions = [
+      'POST' => 'create',
+      'GET' => 'single'
+    ];
+
+    $this->request_data = !empty($_REQUEST) ? $_REQUEST : false;
+
+    $this->request_action = array_key_exists($request_method, $request_actions) ?
+      $request_actions[$request_method] :
+      false;
   }
 
   private function is_index_of_post_type() {
@@ -43,13 +75,14 @@ class Controller {
         "/{$this->post_type}/single-{$this->post_type}.php";
 
       if(file_exists($single_template)) {
-        $this->single($single_template);
+        $this->template = $single_template;
+        $this->single();
 
         return;
       }
     }
 
-    $this->single($template);
+    $this->single();
 
     return;
   }
@@ -60,12 +93,13 @@ class Controller {
       '.php';
 
     if(file_exists($archive_template)) {
-      $this->index($archive_template);
+      $this->template = $archive_template;
+      $this->index();
 
       return;
     }
 
-    $this->index($template);
+    $this->index();
   }
 
   private function set_current_query($query) {
