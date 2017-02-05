@@ -259,14 +259,10 @@ custom post type archive listing view:
 
 ```php
 class PortfolioController extends WPS\Controller {
-  public function __construct($post_type = null, $template_fallback) {
-    parent::__construct($post_type, $template_fallback);
-  }
-
-  public function index($template) {
+  public function index() {
     $portfolio_items = [78 => 'test 1', 87 => 'test 2'];
 
-    include $template;
+    include $this->template;
   }
 }
 ```
@@ -285,6 +281,21 @@ For single post type templates, use the following format when naming files:
 
 For the blog index page, use the following format: `index-post.php` along with
 the `index` controller method within the `PostController` class.
+
+Note that each controller is extended off of the `WPS\Controller` class, this
+can also be setup to extend from an app specific controller i.e.
+`ApplicationController` rather that directly from `WPS`.
+
+It is also worth nothing that `WPS Controllers` don't usually require a custom
+`__construct` method as this is autoloaded for you. However, if you need to
+apend what is passed to `WPS` upon controller setup, the block below shows you
+the `__construct` method params:
+
+```php
+public function __construct($post_type = null, $template_fallback) {
+  parent::__construct($post_type, $template_fallback);
+}
+```
 
 ### Adding standalone classes/methods
 
