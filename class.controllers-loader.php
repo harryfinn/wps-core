@@ -64,6 +64,8 @@ class ControllersLoader extends \WPS {
   }
 
   private static function get_current_post_type() {
+    if(self::is_error_page()) return self::set_error_page_post_type();
+
     if(self::is_blog_index()) return self::set_blog_index_post_type();
 
     if(self::is_homepage()) return self::set_homepage_post_type();
@@ -119,6 +121,21 @@ class ControllersLoader extends \WPS {
       '',
       implode('-', array_map('ucfirst', explode('-', $post_type)))
     ) . 'Controller';
+  }
+
+  private static function is_error_page() {
+    return is_404();
+  }
+
+  private static function set_error_page_post_type() {
+    $post_type = 'error-page';
+    $error_page_template = WPS_VIEWS_DIR . "/page/page-error.php";
+
+    if(file_exists($error_page_template)) {
+      self::$template = $error_page_template;
+    }
+
+    return $post_type;
   }
 
   private static function is_blog_index() {
