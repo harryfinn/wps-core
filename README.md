@@ -8,12 +8,10 @@ The purpose of `WPS` is to offer a structured approach to WordPress theme
 development by setting up an framework similar to a standard `MVC` in which to
 manage the theme.
 
-This repo contains the core library code of WPS, required to manage the MVC
-aspect of WPS. This repo can be used as a submodule within an existing or new
-WordPress project, should you wish to use an alternative structure or want to
-use WPS inside an existing project without migrating to the theme framework.
-
-For more information about the WPS theme framework, please [checkout the repo!](https://github.com/harryfinn/wps)
+This repo is the core library code of WPS, allowing you to manage a WordPress 
+theme within an MVC pattern. This repo should be used as a submodule within 
+a new WordPress project (although it would be possible to integrate with an
+existing project).
 
 ## Installing
 
