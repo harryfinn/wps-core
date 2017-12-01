@@ -19,7 +19,7 @@ class Autoloaders {
     if(file_exists($class_file_path)) require_once $class_file_path;
 
     $app_namespaced_class_file_path = self::app_namespaced_class_file_path(
-      $class_name
+      $name
     );
 
     if(file_exists($app_namespaced_class_file_path)) {
